@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bakehouse Tutorial</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="./style.css">
+    <script src="./lib/peg-0.10.0.js"></script>
+    <script src="./lib/shader-park-dist.js" defer=""></script>
+    <script src="./recipe_parser.js"></script>
+    <script src="./main.js"></script>
+  </head>  
+  <body>
+    <div class="container">    
+    <div id="code">
+      <textarea id="source">
+MINCED CHICKEN
+
+1½	cups minced cooked chicken
+1	hard-cooked egg
+½	tsp. grated onion
+⅓	cup mayonaise
+	Salt and pepper
+	Merita Thin-Sliced Bread
+	Merita Wheat Bread
+
+Combine minced chicken, riced or sieved hard-cooked egg, seasonings and mayonaise. Spread Merita Thin-Sliced Bread with soft butter or margarine; add filling and cover with buttered bread. Trim crusts; cut in small squares, triangles, strips, etc., or cut bread with fancy cutters; spread with butter, filling and cover as above. Makes about 75 sandwiches. 
+      </textarea>
+      <input type="button" value="update" id="pegUpdateBtn" />
+      <textarea id="script">
+// Put your Shader Park Code here
+rotateY(mouse.x * PI / 2 + time*.5);
+rotateX(mouse.y * PI / 2);
+metal(.5); 
+shine(.4);
+color(getRayDirection()+.2);
+rotateY(getRayDirection().y*4+time)
+boxFrame(vec3(.4), .02);
+expand(.02);
+blend(nsin(time)*.6)
+sphere(.2);
+      </textarea>
+      <input type="button" value="render" id="updateBtn" />
+    </div>
+    <div id="draw">
+      <canvas id="output_canvas"></canvas>
+      <div id="error"></div>
+    </div>
+    </div>
+</html>
