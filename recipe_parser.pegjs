@@ -33,12 +33,12 @@ Number = i:Integer fr:Fraction?
   return fr;
 }
 
-Size = s:("tsp"/"tbsp"/"cups"/"cup") "."?
+Size = s:("tsp"/"tbsp"/"cups"/"cup"/"teaspoon") "."?
 {
   return s;
 }
 
-Food = text:$(char+) EOL
+Food = text:$(char+) newline
    { return text.trim(); }
 
 
@@ -65,20 +65,45 @@ Fraction
 }
 
 Output
- = _? "(" c:[0-9]+ _ o:[a-zA-Z]+ "."? _? ")"
+ = _? "(" c:num_range _ o:[a-zA-Z]+ "."? _? ")"
  { 
  	return { 
     	type: "Output",
-        count: c.join("").trim(),
+        count: c,
         content: o.join("").trim()
  	}; 
- } / "Makes" [^0-9]+ c:[0-9]+ _ o:[^.]+ "."
+ } / _? [m,M] "akes" _? m:approx? _? c:num_range _ o:[^.]+ "." _?
  { 
  	return { 
     	type: "Output",
-        count: c.join("").trim(),
+        count: c,
+        modifiers: m,
         content: o.join("").trim()
  	}; 
+} / _? "("? ([t,T] "his recipe" _?)? [s,S] "erves" _? m:approx? _? c:num_range "."? ")"? _?
+ { 
+ 	return { 
+    	type: "Output",
+        count: c,
+        modifiers: m,
+        content: "people"
+ 	}; 
+}
+
+approx = a:("about"/"around") 
+{
+	return a;
+}
+
+num_range = l:[0-9]+ (" or " / "-") h:[0-9]+
+{
+	return {
+    	low: parseInt(l.join("")),
+        high: parseInt(h.join(""))
+    };
+} / c:[0-9]+
+{
+	return parseInt(c.join(""));
 }
 
 _ "whitespace"
@@ -86,4 +111,3 @@ _ "whitespace"
   
 char = [^\n\r]
 newline = '\n' / '\r' '\n'?
-EOL = newline / !.
