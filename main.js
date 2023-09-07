@@ -23,7 +23,7 @@ const update_dropdown = () => {
   client.open('GET', `./recipes/${document.getElementById("recipe").value}`);
   client.onreadystatechange = function() {
     // alert(client.responseText);
-    document.getElementById("source").innerHTML = client.responseText.replace("\n","<br>");
+    document.getElementById("source").innerHTML = client.responseText;
   }
   client.send();
 

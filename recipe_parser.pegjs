@@ -42,23 +42,17 @@ Food = text:$(char+) EOL
    { return text.trim(); }
 
 
-InstructionBlock = Instruction+ //Serves?
+InstructionBlock = Instruction+
 
 Instruction
-  = c:[^.(;] d:[^.;]+ e:[.;]
+  = Output /
+  c:[^.(;] d:[^.;]+ e:[.;]
   { 
     return { 
-      instr: c + d.join("").trim(),
+      instr: c.trim() + d.join("").trim(),
       end: e
     }; 
-  }  / _? "(" d:[^)]+ ")"
-  { 
-    return { 
-      instr: d.join("").trim(),
-      end: ")",
-      type: "Serving Size"
-    }; 
-  }  
+  } 
 
 Integer "integer"
   = [0-9]+ { return parseInt(text(), 10); }
@@ -68,6 +62,23 @@ Fraction
   const normalized = char.normalize("NFKD");
   const operands = normalized.split("⁄");
   return operands[0] / operands[1];
+}
+
+Output
+ = _? "(" c:[0-9]+ _ o:[a-zA-Z]+ "."? _? ")"
+ { 
+ 	return { 
+    	type: "Output",
+        count: c.join("").trim(),
+        content: o.join("").trim()
+ 	}; 
+ } / "Makes" [^0-9]+ c:[0-9]+ _ o:[^.]+ "."
+ { 
+ 	return { 
+    	type: "Output",
+        count: c.join("").trim(),
+        content: o.join("").trim()
+ 	}; 
 }
 
 _ "whitespace"
