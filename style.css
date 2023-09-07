@@ -10,7 +10,6 @@ body {
   border : 0px; 
   background-color : white;
 }
-
 .container {
   display: flex;
 }
@@ -18,7 +17,7 @@ body {
   padding: 20px;
   flex: 1;
 }
-#draw {
+#right {
   flex: 2;
 }
 textarea {
@@ -32,4 +31,10 @@ canvas {
   padding : 0px;
   border : 0px;
   background-color : transparent;
+}
+#overlapper {
+  width: 100%;
+  position:absolute;
+  top:0;
+  opacity: 0.3;
 }

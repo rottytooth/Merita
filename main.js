@@ -51,6 +51,7 @@ window.addEventListener('load', function() {
     let errorOutput = document.getElementById("error");
     errorOutput.innerHTML = "";
     let newCanv = document.createElement("canvas");
+    newCanv.id = "output_canvas";
     // try {
       // sculptToMinimalRenderer(newCanv, codeblock.value);
     // }
@@ -60,6 +61,7 @@ window.addEventListener('load', function() {
     let draw = document.getElementById("draw");
     draw.innerHTML = null;
     draw.appendChild(newCanv);
+    document.getElementById('overlapper').style.height = newCanv.clientHeight + "px";
   });
   
   document.getElementById("pegUpdateBtn").addEventListener("click", function() {
@@ -71,7 +73,6 @@ window.addEventListener('load', function() {
       `INSTRUCTIONS: ${recipe_nodes.instructions.length}`
     );
   });
-
 
 }, false);
 
