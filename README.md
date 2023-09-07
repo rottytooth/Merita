@@ -1,9 +1,9 @@
 # MERITA
 =================
 
-A bread-based esolang for Bakehouse http://www.bacfl.org/
+An educational, bread-based esolang for the Bakehouse esolangs workshop http://www.bacfl.org/
 
-This uses two technologies that can be used directly from their sites:
+This uses two libraries that can be experimented with on their sites:
 * [PEG.js](https://pegjs.org/online)
 * [Shader Park](https://shaderpark.netlify.com/).
 

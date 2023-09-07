@@ -2,7 +2,7 @@ const codeblock = document.getElementById("script");
 const draw = document.getElementById("draw");
 
 const recipes = [
-  "CANAPES",
+  "CHEESE-OLIVE CANAPES",
   "DEVILED TONGUE",
   "PINWHEELS",
   "CORNED BEEF HASH",

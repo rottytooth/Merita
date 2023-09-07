@@ -22,9 +22,3 @@ let color_set = [
 #dcc889		vec3(0.863,0.784,0.537)
 #d8ac54		vec3(0.847,0.675,0.329)
 #665f43		vec3(0.4,0.373,0.263)
-
-
-intersect()
-difference()
-blend()
-mixGeo()

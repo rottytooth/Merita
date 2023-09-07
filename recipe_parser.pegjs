@@ -33,7 +33,11 @@ Number = i:Integer fr:Fraction?
   return fr;
 }
 
-Size = s:("tsp"/"tbsp"/"cups"/"cup"/"teaspoon") "."?
+Size = s:"package" " ("[0-9] " oz.)"
+{
+	return s;
+}
+/ s:("tsp"/"tbsp"/"cups"/"cup"/"teaspoon"/"package") "."?
 {
   return s;
 }
