@@ -74,5 +74,7 @@ window.addEventListener('load', function() {
     );
   });
 
+  document.getElementById('updateBtn').click();
+
 }, false);
 

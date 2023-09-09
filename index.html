@@ -19,7 +19,10 @@
       <textarea id="source"></textarea>
       <input type="button" value="update" id="pegUpdateBtn" />
       <textarea id="script">
-// Put your Shader Park Code here
+// load image
+document.getElementById('overlapper').style.backgroundImage="url(./img/crab_canapes.png)";
+
+// shader code
 rotateY(mouse.x * PI / 2 + time*.5);
 rotateX(mouse.y * PI / 2);
 metal(.5); 
