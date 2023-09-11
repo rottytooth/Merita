@@ -11,10 +11,242 @@
     "vec3(0.847,0.675,0.329)",
     "vec3(0.4,0.373,0.263)"
   ];
+  
+  const food_colors = {
+	"sugar":	"vec3(0.1,0.1,0.1)",
+	"cornstarch":	"vec3(0.9,0.2,0.9)",
+	"water":	"vec3(0.1,0.3,0.9)",
+	"orange juice": "vec3(0.175,0.2,0.4)",
+	"salt": "vec3(34,0.5,0.7)",
+	"egg": "vec3(5, 0.67, 0)",
+	"orange": "vec3(sin(sin(time)),0.67,0)",
+	"lemon juice": "vec3(.7, .9, 0)",
+	"butter": "vec3(0.1, 0.1, 0.8)"
+  };
+
+  const movement = {
+    "blend": "blend(abs(sin(time))/%x% + 1/%y%);",
+    "roll": "displace(sin(time)/%x%,cos(time)/%y%,0);",
+    "trim": `
+    union();
+    color(0.1,0.1,cos(time));
+    rotateY(time);
+    torus(0.5,0.2);
+    difference();
+    displace(.5,0,0)
+    box(.3,.25,.15)
+    `,
+    "wrap": "displace(sin(time)/%x%,cos(time)/%y%,0);",
+    "mix": "displace(sin(time)/%x%,cos(time)/%y%,0);",
+    "stir": "displace(sin(time)/%x%,cos(time)/%y%,0);",
+    "add": "displace(sin(time)/%x%,cos(time)/%y%,0);",
+    "cool": "displace(sin(time)/%x%,cos(time)/%y%,0);",
+    "return": "reset();"
+  };
+  
+  const bread = `
+reset();
+union();
+displace(sin(time/3));
+rotateX(time/2);
+color(0.7,0.5,0.3);
+box(0.28, 0.03, 0.28);
+mirrorX();
+displace(0.15,0,0.18);
+cylinder(0.18, 0.03);
+
+reset();
+displace(sin(time/3));
+rotateX(time/2);
+let noiseScale = 4;
+let t = getSpace();
+let h= 0.5 * noise(noiseScale * t + time) + 0.5;
+
+color(1*h,0.4*h,0.1*h);
+box(0.3, 0.03, 0.3);
+
+mirrorX();
+displace(0.15,0,0.18);
+cylinder(0.2, 0.03);
+reset();
+`;
+
+const pickles = `
+	reset();
+    union();
+    let scale = 0.05
+    let freq = 4
+    let s = getSpace()
+    let n = noise(s * freq + time) * scale
+    n = noise(vec3(n+time*0,n+0.1-time*0.1,n+0.5-time*0.1)*2.1)*0.01
+
+	displace(0,-.4,0);
+
+    color(n,n*7.5,0);
+    mirrorX();
+    blend(0.2);
+    displace(.4,-0.5);
+    sphere(0.3+n*2);
+    displace(0,.2,.0);
+    sphere(0.3+n*2);
+    displace(0,.4,0.);
+    sphere(0.3+n*2);
+    displace(0,.4);
+    sphere(0.3+n*2);
+
+`
+const kids = `
+  let x = 0;let y = 0;
+  let img1 = new Image();
+  img1.src = 'img/boy and girl.png';
+
+  let timer = setInterval(function() {
+    let overlap = document.getElementById('2d_canvas');
+    const ctx = overlap.getContext("2d");
+    if (x > overlap.width || y > overlap.height) { 
+      x = 0;
+      y = 0;
+    }
+    if (x % 100 == 0) 
+      ctx.clearRect(0, 0, overlap.width, overlap.height);
+    
+    ctx.drawImage(img1, x, y, 295 * 2, 225 * 2);
+
+    x+=4;y+=4;
+  }, 200);
+`;
+
+const dog = `
+  let img_dog = new Image();
+  img_dog.src = 'img/porcellain_dog.png';
+
+  let timer = setInterval(function() {
+    let overlap = document.getElementById('2d_canvas');
+    const ctx = overlap.getContext("2d");
+
+	ctx.clearRect(0, 0, overlap.width, overlap.height);
+    
+    ctx.drawImage(img_dog, Math.floor(Math.random() * overlap.width), Math.floor(Math.random() * overlap.height), 275 * 2, 429 * 2);
+  }, 2000);
+`;
+
+const torte = `
+union;
+let scale = 2.0;
+let s = getSpace();
+let n = 0.2*noise(scale * s + time);
+let noiseScale = 10;
+let t = getSpace();
+let h= 1.9 * noise(noiseScale * t + time) + .75;
+
+
+color(.38*h,.1*h,cos(time)*h);
+rotateY(time);
+
+torus(.5,.2);
+difference();
+displace(.5,0,0);
+box(.3,.25,.15);
+
+color(.3,.1,0);
+union();
+displace(-.5,-.16,0);
+cylinder(.69,.1);
+difference();
+cylinder(.33,.2);
+displace(.5,0,0);
+box(.3,.25,.15);
+`
 }
 
 Program = t:Title newline ing:IngredientBlock newline ins:InstructionBlock _?
 {
+  let code = "";
+  for(let i = 0; i < ing.length; i++) {
+  	// if it's bread, show the bread
+    if (ing[i].type == "Merita") {
+  		code += bread;
+  		continue;
+  	}
+    if (ing[i].food.includes("Pimiento")) {
+    	code += kids;
+        continue;
+    }
+    if (ing[i].food.includes("pickle")) {
+    	code += pickles;
+        continue;
+    }
+    if (ing[i].food.includes("salt") || ing[i].food.includes("pepper")) {
+    	code += dog;
+        continue;
+    }
+    
+    if (i > 0 && i % 3 == 0) {
+      code += `
+      reset();
+      blend(abs(sin(time))/%x%);
+      `.replace("%x%",i);
+    }
+
+    // match color to ingredient. if there is no color defined, grab them in order from the preset list
+    let matched_color = false;
+    for (const [key, value] of Object.entries(food_colors)) {
+      if (ing[i].food.includes(key)) {
+          code += "color(" + value + ");\n";
+            matched_color = true;
+        }
+    }
+    if (!matched_color)
+    code += "color(" + color_set[i] + ");\n";
+
+    let shape = "";
+
+    let sizes = ing[i].food.split(/\s+/).map(({length}) => length);
+    if (ing[i].size != null) 
+    	sizes.push(ing[i].size.length);
+    while (sizes.length < 7) {
+      sizes.push(sizes[sizes.length - 1]);
+    }
+
+    if (i < ins.length) {
+      for (const [key, value] of Object.entries(movement)) {
+        if ('instr' in ins[i] && ins[i].instr.includes(key)) {
+          let ins_sizes = ins[i].instr.split(/\s+/).map(({length}) => length);
+          let prep_value = value.replace("%x%",ins_sizes[0]);
+          prep_value = prep_value.replace("%y%",ins_sizes[1]);
+          code += "\n" + prep_value;
+        }
+      }
+    }
+
+    // determine shape from size
+    if (ing[i].number != null) {
+      if (ing[i].number < 1.5)
+        shape = "sphere(" + sizes[0] + ");\n";
+      if (ing[i].number <= 2)
+        shape = "torus(" + 1/sizes[0] + ",1/" + sizes[1] + ",1/" + sizes[2] + ");\n";
+      if (ing[i].number <= 3)
+        shape = `line(vec3(1/${sizes[0]},1/${sizes[1]},1/${sizes[2] + 2}),vec3(1/${sizes[3]},1/${sizes[4]},1/${sizes[5]}),1/${sizes[6] + 2});\n`;
+      else
+        shape = `grid(1/${sizes[0]},1/${sizes[1]},1/(${sizes[2]} + 5));\n`;
+    } else shape = `box(${1/sizes[0]},1/${sizes[1]},1/${sizes[2]});\n`;
+
+    
+    // determine ??? from action
+    // for(let k = 0; k < ins.length; k++) {
+    //   if (k.instr.toLowerCase().includes(ing[i].food.toLowerCase())) {
+          
+    //     }
+    // }
+    
+    //code += ing[i].food +"\n";
+
+	code += "displace(" + 1 / ing[i].food.length + ");\n";
+    code += shape;
+    // code += "sphere(" + ing[i].number * 0.1 + (i % 2 == 0 ? " * cos(time));\n" : " * sin(time));\n");
+    
+  }
+  return code;
   return {
       "title": t,
         "ingredients": ing,

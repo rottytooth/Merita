@@ -1,5 +1,4 @@
-const codeblock = document.getElementById("script");
-const draw = document.getElementById("draw");
+import {sculptToMinimalRenderer} from 'shader-park-core';
 
 const recipes = [
   "CHEESE-OLIVE CANAPES",
@@ -15,24 +14,21 @@ const recipes = [
   "ORANGE ANGEL FOOD TORTE"
 ];
 
-const default_recipe = "CREAMED SHRIMP ON TOAST";
+const default_recipe = "DEVILED TONGUE";
 
 const update_dropdown = () => {
   //    alert(document.getElementById("recipe").value);
   var client = new XMLHttpRequest();
-  client.open('GET', `./recipes/${document.getElementById("recipe").value}`);
+  client.open('GET', `recipes/${document.getElementById("recipe").value}`);
   client.onreadystatechange = function() {
     // alert(client.responseText);
     document.getElementById("source").innerHTML = client.responseText;
+    document.getElementById('updateBtn').click();
   }
   client.send();
-
 }
 
 window.addEventListener('load', function() { 
-  // if the function is loaded yet
-  if (typeof sculptToMinimalRenderer === "function") 
-    sculptToMinimalRenderer(document.querySelector('#output_canvas'), codeblock.value);
 
   const recipe_list = document.getElementById("recipe");
   for(let i = 0; i < recipes.length; i++) {
@@ -52,29 +48,31 @@ window.addEventListener('load', function() {
     errorOutput.innerHTML = "";
     let newCanv = document.createElement("canvas");
     newCanv.id = "output_canvas";
-    // try {
-      // sculptToMinimalRenderer(newCanv, codeblock.value);
-    // }
-    // catch(e) {
-    //   errorOutput.innerText = e;
-    // }
+    let pegcodeblock = document.getElementById("source");
+
+    // clear any remaining timers
+    for (var i = 1; i < 99999; i++)
+        window.clearInterval(i);
+
+    // load new program
+    try {
+      sculptToMinimalRenderer(newCanv, recipeParser.parse(pegcodeblock.value));
+    }
+    catch(e) {
+      errorOutput.innerText = e;
+    }
     let draw = document.getElementById("draw");
     draw.innerHTML = null;
     draw.appendChild(newCanv);
+
+    // set overlap div
     document.getElementById('overlapper').style.height = newCanv.clientHeight + "px";
-  });
-  
-  document.getElementById("pegUpdateBtn").addEventListener("click", function() {
-    const pegcodeblock = document.getElementById("source");
-    recipe_nodes = recipeParser.parse(pegcodeblock.value);
-    alert(
-      `TITLE: ${recipe_nodes.title}\n` +
-      `INGREDIENTS: ${recipe_nodes.ingredients.length}\n` +
-      `INSTRUCTIONS: ${recipe_nodes.instructions.length}`
-    );
+
+    let overlap = document.getElementById('2d_canvas');
+    overlap.height = newCanv.height;
+    overlap.width = newCanv.width;
   });
 
   document.getElementById('updateBtn').click();
 
 }, false);
-

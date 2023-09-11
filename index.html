@@ -8,40 +8,40 @@
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="./style.css">
     <script src="./lib/peg-0.10.0.js"></script>
-    <script src="./lib/shader-park-dist.js" defer=""></script>
+    <!-- <script src="./lib/shader-park-dist.js" defer=""></script> -->
     <script src="./recipe_parser.js"></script>
-    <script src="./main.js"></script>
+    <script src="./main.js" type="module"></script>
   </head>  
   <body>
+    <div style="visibility: collapse;display:none"><!-- HACK ALERT: preloading recipes so yarn knows they exist. All this can go when we move to pure js -->
+      <iframe src="recipes/CHEESE-OLIVE CANAPES.recipe"></iframe>
+      <iframe src="recipes/CORNED BEEF HASH.recipe"></iframe>
+      <iframe src="recipes/CRAB CANAPES.recipe"></iframe>
+      <iframe src="recipes/CREAMED SHRIMP ON TOAST.recipe"></iframe>
+      <iframe src="recipes/DEVILED TONGUE.recipe"></iframe>
+      <iframe src="recipes/HOT CHEESE-TOMATO.recipe"></iframe>
+      <iframe src="recipes/MINCED CHICKEN.recipe"></iframe>
+      <iframe src="recipes/ORANGE ANGEL FOOD TORTE.recipe"></iframe>
+      <iframe src="recipes/PINWHEELS.recipe"></iframe>
+      <iframe src="recipes/RIBBONS.recipe"></iframe>
+      <iframe src="recipes/ROLLED.recipe"></iframe>
+      <iframe src="img/boy and girl.png"></iframe>
+      <iframe src="img/porcellain_dog.png"></iframe>
+    </div>
     <div class="container">    
     <div id="code">
       <select name="recipe" id="recipe"><br/>
       <textarea id="source"></textarea>
-      <input type="button" value="update" id="pegUpdateBtn" />
-      <textarea id="script">
-// load image
-document.getElementById('overlapper').style.backgroundImage="url(./img/crab_canapes.png)";
-
-// shader code
-rotateY(mouse.x * PI / 2 + time*.5);
-rotateX(mouse.y * PI / 2);
-metal(.5); 
-shine(.4);
-color(getRayDirection()+.2);
-rotateY(getRayDirection().y*4+time)
-boxFrame(vec3(.4), .02);
-expand(.02);
-blend(nsin(time)*.6)
-sphere(.2);
-      </textarea>
-      <input type="button" value="render" id="updateBtn" />
+      <input type="button" value="update" id="updateBtn" />
       <div id="error"></div>
     </div>
     <div id="right">
       <div id="draw">
         <canvas id="output_canvas"></canvas>
       </div>
-      <div id="overlapper"></div>
+      <div id="overlapper">
+        <canvas id="2d_canvas"></canvas>
+      </div>
       </div>
     </div>
   </div>
