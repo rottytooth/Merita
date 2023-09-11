@@ -45,3 +45,7 @@ canvas {
   margin-top: 30px;
   color: #aa0000;
 }
+#output_canvas {
+  width: 865;
+  height: 745;
+}

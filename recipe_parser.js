@@ -143,10 +143,25 @@ recipeParser = /*
 
         peg$c0 = function(t, ing, ins) {
           let code = "";
+          
+          if (t.toLowerCase().includes("torte")) {
+          	code += torte;
+          }
+          
+          let bread_done = false;
+          
           for(let i = 0; i < ing.length; i++) {
+          
+          	code += 'displace(' + i*.1 + ',' + i*(-.1) + ',' + i*.1 + ');\n';
+          
           	// if it's bread, show the bread
             if (ing[i].type == "Merita") {
-          		code += bread;
+            	if (!bread_done) {
+          			code += bread;
+                    bread_done = true;
+                } else {
+                	code += second_bread;
+                }
           		continue;
           	}
             if (ing[i].food.includes("Pimiento")) {
@@ -1750,6 +1765,38 @@ recipeParser = /*
     reset();
     `;
 
+    const torte = `
+    union;
+    rotateZ(sin(time) / 3);
+    rotateX(sin(time) * 2);
+    displace(0,0,cos(time) / 4);
+
+    let torte_scale = 2.0;
+    let torte_s = getSpace();
+    let torte_n = 0.2*noise(torte_scale * torte_s + time);
+    let torte_noiseScale = 10;
+    let torte_t = getSpace();
+    let torte_h = 1.9 * noise(torte_noiseScale * torte_t + time) + .75;
+
+
+    color(.38*torte_h,.1*torte_h,cos(time)*torte_h);
+    rotateY(time);
+
+    torus(.5,.2);
+    difference();
+    displace(.5,0,0);
+    box(.3,.25,.15);
+
+    color(.3,.1,0);
+    union();
+    displace(-.5,-.16,0);
+    cylinder(.69,.1);
+    difference();
+    cylinder(.33,.2);
+    displace(.5,0,0);
+    box(.3,.25,.15);
+    `
+
     const pickles = `
     	reset();
         union();
@@ -1775,6 +1822,7 @@ recipeParser = /*
 
     `
     const kids = `
+
       let x = 0;let y = 0;
       let img1 = new Image();
       img1.src = 'img/boy and girl.png';
@@ -1792,12 +1840,12 @@ recipeParser = /*
         ctx.drawImage(img1, x, y, 295 * 2, 225 * 2);
 
         x+=4;y+=4;
-      }, 200);
+      }, 200); 
     `;
 
-    const dog = `
+    const second_bread = `
       let img_dog = new Image();
-      img_dog.src = 'img/porcellain_dog.png';
+      img_dog.src = 'img/merita_bread.png';
 
       let timer = setInterval(function() {
         let overlap = document.getElementById('2d_canvas');
@@ -1805,36 +1853,86 @@ recipeParser = /*
 
     	ctx.clearRect(0, 0, overlap.width, overlap.height);
         
-        ctx.drawImage(img_dog, Math.floor(Math.random() * overlap.width), Math.floor(Math.random() * overlap.height), 275 * 2, 429 * 2);
+        ctx.drawImage(img_dog, Math.floor(Math.random() * overlap.width), Math.floor(Math.random() * overlap.height), 1098, 615);
       }, 2000);
     `;
 
-    const torte = `
-    union;
-    let scale = 2.0;
+    const dog = `
+    reset();
+    union();
+    color(0.256,0,0);
+
+    let halfCircle = shape(() => {  
+
+      sphere(0.2);
+      difference();
+      displace(0,-.15,0);
+      box(0.21,0.28,0.21);
+    })
+
+    let hat =(() => {
+      
+    	halfCircle();
+    	blend(0.04);
+    	displace(0,0.23,0);
+    	sphere(0.02)
+    	displace(0,-0.08,0);
+    	torus(0.16,0.01);
+    })
+
+    displace(sin(time));
+    displace(0,0.1,0.4);
+    hat();
+
+    //nose
+    reset();
+    displace(sin(time));
+    color(0,0,0);
+    displace(0.02,-.1,-.2);
+    sphere(0.050);
+
+    //eyes
+    reset();
+    displace(sin(time));
+    mirrorX();
+    displace(0.15,0,0);
+    sphere(0.05);
+
+    //ears
+    color(.94,.80,.40);
+    displace(0.35,-0.3,0.3);
+
     let s = getSpace();
-    let n = 0.2*noise(scale * s + time);
-    let noiseScale = 10;
-    let t = getSpace();
-    let h= 1.9 * noise(noiseScale * t + time) + .75;
+    displace(0,sin(s.y*3)*0.2, 0);
+    sphere(0.2);
+
+    //head
+    reset();
+    displace(sin(time));
+    blend(0.1);
+
+    rotateX(PI/6);
+    displace(0,0,0.50);
+    sphere(0.48);
+    blend(0.1);
+    displace(0,-.28,-.4);
+    sphere(0.20);
+
+    reset();
+    displace(sin(time));
+    displace(0,-0.7,0.3);
 
 
-    color(.38*h,.1*h,cos(time)*h);
+    function oscillate(x) {
+      return sin(24*x)*0.5;
+    }
+
     rotateY(time);
 
-    torus(.5,.2);
-    difference();
-    displace(.5,0,0);
-    box(.3,.25,.15);
-
-    color(.3,.1,0);
-    union();
-    displace(-.5,-.16,0);
-    cylinder(.69,.1);
-    difference();
-    cylinder(.33,.2);
-    displace(.5,0,0);
-    box(.3,.25,.15);
+    let dog_n = toSpherical(getSpace());
+    let dog_m = min(oscillate(dog_n.y),oscillate(dog_n.z));
+    color(vec3(dog_m+0.5));
+    cylinder(0.5,0.03);
     `
 
 

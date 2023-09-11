@@ -52,8 +52,8 @@ window.addEventListener('load', function() {
 
     // clear any remaining timers
     for (var i = 1; i < 99999; i++)
-        window.clearInterval(i);
-
+        window.clearInterval(i);  
+    
     // load new program
     try {
       sculptToMinimalRenderer(newCanv, recipeParser.parse(pegcodeblock.value));
@@ -71,6 +71,9 @@ window.addEventListener('load', function() {
     let overlap = document.getElementById('2d_canvas');
     overlap.height = newCanv.height;
     overlap.width = newCanv.width;
+
+    // window.alert(`width: ${newCanv.width}\nheight: ${newCanv.height}\n clientWidth: ${newCanv.style.clientWidth}, clientHeight: ${newCanv.style.clientHeight}`);
+
   });
 
   document.getElementById('updateBtn').click();
