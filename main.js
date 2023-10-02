@@ -14,6 +14,12 @@ const recipes = [
   "ORANGE ANGEL FOOD TORTE"
 ];
 
+const setup = `
+  let s = getSpace();
+  let noiseScale = 340;
+  setGeometryQuality(8);
+`
+
 const default_recipe = "DEVILED TONGUE";
 
 const update_dropdown = () => {
@@ -22,7 +28,7 @@ const update_dropdown = () => {
   client.open('GET', `recipes/${document.getElementById("recipe").value}`);
   client.onreadystatechange = function() {
     // alert(client.responseText);
-    document.getElementById("source").innerHTML = client.responseText;
+    document.getElementById("source").value = client.responseText;
     document.getElementById('updateBtn').click();
   }
   client.send();
@@ -50,13 +56,15 @@ window.addEventListener('load', function() {
     newCanv.id = "output_canvas";
     let pegcodeblock = document.getElementById("source");
 
+    let program = setup + recipeParser.parse(pegcodeblock.value);
+
     // clear any remaining timers
     for (var i = 1; i < 99999; i++)
         window.clearInterval(i);  
     
     // load new program
     try {
-      sculptToMinimalRenderer(newCanv, recipeParser.parse(pegcodeblock.value));
+      sculptToMinimalRenderer(newCanv, program);
     }
     catch(e) {
       errorOutput.innerText = e;

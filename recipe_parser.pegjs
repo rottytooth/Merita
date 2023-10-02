@@ -1,4 +1,11 @@
 {
+  const setup = `
+    // color behaviors
+    let w_sugar = noise (s*80); 
+    let n_cornstarch = 2.5 * noise(noiseScale * s + time) + 1.5;
+    let o_range = .5 * noise((noiseScale -350) * s + time) +  1.2;
+  `
+
   const color_set = [
     "vec3(0.714,0.494,0.192)",
     "vec3(0.208,0.216,0.165)",
@@ -13,13 +20,13 @@
   ];
   
   const food_colors = {
-	"sugar":	"vec3(0.1,0.1,0.1)",
-	"cornstarch":	"vec3(0.9,0.2,0.9)",
-	"water":	"vec3(0.1,0.3,0.9)",
+	"sugar":	"vec3(80*w,90*w,8*w)",
+	"cornstarch":	"vec3(130*n_cornstarch,14*n_cornstarch,1.4*n_cornstarch);", //tender blended beige
+	"water":	"vec3(0.28,0.6,0.35)", // festive teal
 	"orange juice": "vec3(0.175,0.2,0.4)",
 	"salt": "vec3(34,0.5,0.7)",
 	"egg": "vec3(5, 0.67, 0)",
-	"orange": "vec3(sin(sin(time)),0.67,0)",
+	"orange": "vec3(120*o_range,0.30*o_range,0*o_range)",
 	"lemon juice": "vec3(.7, .9, 0)",
 	"butter": "vec3(0.1, 0.1, 0.8)"
   };
@@ -45,74 +52,72 @@
   };
   
   const bread = `
-reset();
-union();
-displace(sin(time/3));
-rotateX(time/2);
-color(0.7,0.5,0.3);
-box(0.28, 0.03, 0.28);
-mirrorX();
-displace(0.15,0,0.18);
-cylinder(0.18, 0.03);
+    reset();
+    union();
+    displace(sin(time/3));
+    rotateX(time/2);
+    color(0.7,0.5,0.3);
+    box(0.28, 0.03, 0.28);
+    mirrorX();
+    displace(0.15,0,0.18);
+    cylinder(0.18, 0.03);
 
-reset();
-displace(sin(time/3));
-rotateX(time/2);
-let noiseScale = 4;
-let t = getSpace();
-let h= 0.5 * noise(noiseScale * t + time) + 0.5;
+    reset();
+    displace(sin(time/3));
+    rotateX(time/2);
+    let t = getSpace();
+    let h= 0.5 * noise(noiseScale * t + time) + 0.5;
 
-color(1*h,0.4*h,0.1*h);
-box(0.3, 0.03, 0.3);
+    color(1*h,0.4*h,0.1*h);
+    box(0.3, 0.03, 0.3);
 
-mirrorX();
-displace(0.15,0,0.18);
-cylinder(0.2, 0.03);
-reset();
+    mirrorX();
+    displace(0.15,0,0.18);
+    cylinder(0.2, 0.03);
+    reset();
 `;
 
 const torte = `
-union;
-rotateZ(sin(time) / 3);
-rotateX(sin(time) * 2);
-displace(0,0,cos(time) / 4);
+    union;
+    rotateZ(sin(time) / 3);
+    rotateX(sin(time) * 2);
+    displace(0,0,cos(time) / 4);
 
-let torte_scale = 2.0;
-let torte_s = getSpace();
-let torte_n = 0.2*noise(torte_scale * torte_s + time);
-let torte_noiseScale = 10;
-let torte_t = getSpace();
-let torte_h = 1.9 * noise(torte_noiseScale * torte_t + time) + .75;
+    let torte_scale = 2.0;
+    let torte_s = getSpace();
+    let torte_n = 0.2*noise(torte_scale * torte_s + time);
+    let torte_noiseScale = 10;
+    let torte_t = getSpace();
+    let torte_h = 1.9 * noise(torte_noiseScale * torte_t + time) + .75;
 
 
-color(.38*torte_h,.1*torte_h,cos(time)*torte_h);
-rotateY(time);
+    color(.38*torte_h,.1*torte_h,cos(time)*torte_h);
+    rotateY(time);
 
-torus(.5,.2);
-difference();
-displace(.5,0,0);
-box(.3,.25,.15);
+    torus(.5,.2);
+    difference();
+    displace(.5,0,0);
+    box(.3,.25,.15);
 
-color(.3,.1,0);
-union();
-displace(-.5,-.16,0);
-cylinder(.69,.1);
-difference();
-cylinder(.33,.2);
-displace(.5,0,0);
-box(.3,.25,.15);
+    color(.3,.1,0);
+    union();
+    displace(-.5,-.16,0);
+    cylinder(.69,.1);
+    difference();
+    cylinder(.33,.2);
+    displace(.5,0,0);
+    box(.3,.25,.15);
 `
 
 const pickles = `
-	reset();
+	  reset();
     union();
     let scale = 0.05
     let freq = 4
-    let s = getSpace()
     let n = noise(s * freq + time) * scale
     n = noise(vec3(n+time*0,n+0.1-time*0.1,n+0.5-time*0.1)*2.1)*0.01
 
-	displace(0,-.4,0);
+	  displace(0,-.4,0);
 
     color(n,n*7.5,0);
     mirrorX();
@@ -133,7 +138,7 @@ const kids = `
   let img1 = new Image();
   img1.src = 'img/boy and girl.png';
 
-  let timer = setInterval(function() {
+  let timer${timer_count} = setInterval(function() {
     let overlap = document.getElementById('2d_canvas');
     const ctx = overlap.getContext("2d");
     if (x > overlap.width || y > overlap.height) { 
@@ -153,11 +158,11 @@ const second_bread = `
   let img_dog = new Image();
   img_dog.src = 'img/merita_bread.png';
 
-  let timer = setInterval(function() {
+  let timer${timer_count} = setInterval(function() {
     let overlap = document.getElementById('2d_canvas');
     const ctx = overlap.getContext("2d");
 
-	ctx.clearRect(0, 0, overlap.width, overlap.height);
+	  ctx.clearRect(0, 0, overlap.width, overlap.height);
     
     ctx.drawImage(img_dog, Math.floor(Math.random() * overlap.width), Math.floor(Math.random() * overlap.height), 1098, 615);
   }, 2000);
@@ -208,7 +213,6 @@ sphere(0.05);
 color(.94,.80,.40);
 displace(0.35,-0.3,0.3);
 
-let s = getSpace();
 displace(0,sin(s.y*3)*0.2, 0);
 sphere(0.2);
 
@@ -240,11 +244,13 @@ let dog_m = min(oscillate(dog_n.y),oscillate(dog_n.z));
 color(vec3(dog_m+0.5));
 cylinder(0.5,0.03);
 `
+
+var timer_count = 0;
 }
 
 Program = t:Title newline ing:IngredientBlock newline ins:InstructionBlock _?
 {
-  let code = "";
+  let code = setup;
   
   if (t.toLowerCase().includes("torte")) {
   	code += torte;
@@ -262,11 +268,13 @@ Program = t:Title newline ing:IngredientBlock newline ins:InstructionBlock _?
   			code += bread;
             bread_done = true;
         } else {
+          timer_count++;
         	code += second_bread;
         }
   		continue;
   	}
     if (ing[i].food.includes("Pimiento")) {
+      timer_count++;
     	code += kids;
         continue;
     }
@@ -279,12 +287,12 @@ Program = t:Title newline ing:IngredientBlock newline ins:InstructionBlock _?
         continue;
     }
     
-    if (i > 0 && i % 3 == 0) {
-      code += `
-      reset();
-      blend(abs(sin(time))/%x%);
-      `.replace("%x%",i);
-    }
+    // if (i > 0 && i % 3 == 0) {
+    //   code += `
+    //   reset();
+    //   blend(abs(sin(time))/%x%);
+    //   `.replace("%x%",i);
+    // }
 
     // match color to ingredient. if there is no color defined, grab them in order from the preset list
     let matched_color = false;
@@ -339,9 +347,8 @@ Program = t:Title newline ing:IngredientBlock newline ins:InstructionBlock _?
     
     //code += ing[i].food +"\n";
 
-	code += "displace(" + 1 / ing[i].food.length + ");\n";
+  	code += "displace(" + 1 / ing[i].food.length + ");\n";
     code += shape;
-    // code += "sphere(" + ing[i].number * 0.1 + (i % 2 == 0 ? " * cos(time));\n" : " * sin(time));\n");
     
   }
   return code;

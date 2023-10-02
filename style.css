@@ -1,4 +1,12 @@
 /* CSS files add styling rules to your content */
+@font-face {
+  font-family: FiraCode-Light;
+  src: url(fonts/FiraCode-Light.ttf);
+}
+@font-face {
+  font-family: FiraCode;
+  src: url(fonts/FiraCode-Regular.ttf);
+}
 
 body {
   font-family: helvetica, arial, sans-serif;
@@ -16,6 +24,11 @@ body {
 #code {
   padding: 20px;
   flex: 1;
+  background-color: #f3f3f3;
+}
+#source {
+  border: 0px;
+  font-family: FiraCode-Light;
 }
 #right {
   flex: 2;
@@ -44,6 +57,8 @@ canvas {
 #error {
   margin-top: 30px;
   color: #aa0000;
+  background-color: #f3f3f3;
+  font-family: FiraCode
 }
 #output_canvas {
   width: 865;
