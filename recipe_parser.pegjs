@@ -1,5 +1,9 @@
 {
   const setup = `
+    let s = getSpace();
+    let noiseScale = 340;
+    setGeometryQuality(8); 
+  
     // color behaviors
     let w_sugar = noise (s*80); 
     let n_cornstarch = 2.5 * noise(noiseScale * s + time) + 1.5;

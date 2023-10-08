@@ -9,26 +9,27 @@
 }
 
 body {
-  font-family: helvetica, arial, sans-serif;
+  font-family: 'FiraCode';
   margin: 2em;
-  width: 100vw; 
-  height: 100vh; 
   margin : 0px; 
   padding : 0px; 
   border : 0px; 
   background-color : white;
+  overflow: hidden;
 }
 .container {
   display: flex;
 }
 #code {
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   flex: 1;
   background-color: #f3f3f3;
 }
 #source {
   border: 0px;
+  margin-top: 20px;
   font-family: FiraCode-Light;
+  height: 500px;
 }
 #right {
   flex: 2;
