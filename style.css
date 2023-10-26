@@ -14,16 +14,17 @@ body {
   margin : 0px; 
   padding : 0px; 
   border : 0px; 
-  background-color : white;
+  background-color : black;
   overflow: hidden;
 }
 .container {
   display: flex;
 }
 #code {
-  padding: 0 20px 20px 20px;
+  padding: 0 30px 20px 20px;
   flex: 1;
   background-color: #f3f3f3;
+  border-right: 1px solid black;
 }
 #source {
   border: 0px;
@@ -50,10 +51,11 @@ canvas {
   background-color : transparent;
 }
 #overlapper {
-  width: 100%;
   position:absolute;
   top:0;
   pointer-events: none;
+  width: 1041;
+  height: 1049;
 }
 #error {
   margin-top: 30px;
@@ -62,6 +64,6 @@ canvas {
   font-family: FiraCode
 }
 #output_canvas {
-  width: 865;
-  height: 745;
+  width: 1041;
+  height: 1049;
 }

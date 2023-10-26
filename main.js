@@ -6,7 +6,6 @@ const recipes = [
   "PINWHEELS",
   "CORNED BEEF HASH",
   "HOT CHEESE-TOMATO",
-  "RIBBONS",
   "CRAB CANAPES",
   "MINCED CHICKEN",
   "ROLLED",
@@ -14,21 +13,25 @@ const recipes = [
   "ORANGE ANGEL FOOD TORTE"
 ];
 
-
-const default_recipe = "CHEESE-OLIVE CANAPES";
+const default_recipe = "HOT CHEESE-TOMATO";
 
 const load_recipe = () => {
+  let draw = document.getElementById("draw");
+  draw.innerHTML = null;
   let errorOutput = document.getElementById("error");
   errorOutput.innerHTML = "";
+
+  // clear any remaining timers
+  for (var i = 1; i < 99999; i++)
+    window.clearInterval(i);  
+
   let newCanv = document.createElement("canvas");
   newCanv.id = "output_canvas";
   let pegcodeblock = document.getElementById("source");
 
   let program = recipeParser.parse(pegcodeblock.value);
 
-  // clear any remaining timers
-  for (var i = 1; i < 99999; i++)
-      window.clearInterval(i);  
+//  alert(program);
   
   // load new program
   try {
@@ -37,14 +40,17 @@ const load_recipe = () => {
   catch(e) {
     errorOutput.innerText = e;
   }
-  let draw = document.getElementById("draw");
-  draw.innerHTML = null;
-  newCanv.width = 2482;
-  newCanv.height = 2498;
-  newCanv.style.width = '941px';
-  newCanv.style.height = '949px';
+
+  // newCanv.width = 2482;
+  // newCanv.height = 2498;
+  // newCanv.style.width = '941px';
+  // newCanv.style.height = '949px';
+  newCanv.width = 2082; //1982;
+  newCanv.height = 2098; //1924;
+  newCanv.style.width = '841px';
+  newCanv.style.height = '849px';
   newCanv.setAttribute('powerpreference','high-performance');
-  newCanv.setAttribute('data-engine','three.js r155');
+  // newCanv.setAttribute('data-engine','three.js r155');
   draw.appendChild(newCanv);
 
   // set overlap div
@@ -53,14 +59,14 @@ const load_recipe = () => {
   let overlap = document.getElementById('2d_canvas');
   overlap.height = newCanv.height;
   overlap.width = newCanv.width;
+  overlap.style.height = (newCanv.clientHeight + 100) + "px";
+  overlap.style.width = (newCanv.clientWidth + 100) + "px";
 };
 
 const update_dropdown = () => {
-  //    alert(document.getElementById("recipe").value);
   var client = new XMLHttpRequest();
   client.open('GET', `recipes/${document.getElementById("recipe").value}`);
   client.onreadystatechange = function() {
-    // alert(client.responseText);
     document.getElementById("source").value = client.responseText;
     load_recipe();
   }
