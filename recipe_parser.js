@@ -1659,6 +1659,131 @@ recipeParser = /*
         // setGeometryQuality(10); 
         // setStepSize(.99);
         // setMaxIterations(50);
+
+        // SQUARES
+    let s_size = 0.8
+    let size_sq = vec3(s_size)
+    let noiseScale_sq = 340;
+    let s_sq = getSpace();
+    let n1_sq = noise(s_sq*10);
+    let n2_sq = noise(s_sq*10+vec3(0,0,time));        
+    let n3_sq = noise(s_sq*2+vec3(0,0,time));
+    let n4_sq = noise(s_sq*2+vec3(0,0,time) + noise(s_sq*2+vec3(0,0,time)));
+    let n5_sq = noise(s_sq*4+time);
+    let wave = sin(s_sq.y*100+time+400);
+    let y_sq = 1 * noise((noiseScale_sq -350) * s_sq) + 1.9;
+    let n_sq = 2.5 * noise(noiseScale_sq -30 * s_sq + time) + .5;
+    let p_sq = .5 * noise((noiseScale_sq -350) * s_sq) + 1.5;
+    let m_sq = .3 * noise((noiseScale_sq -380) * s_sq) + .5;
+
+    //row1
+    displace(0,0,1)
+    //olive gradient
+    displace(-s_size,s_size*2,0);
+    color(0.25,0.6*s_sq.x,0.03*s_sq.y);
+    box(size_sq);
+
+    //olive skin
+    reset();
+    displace(0,0,1)
+    displace(0,s_size*2,0);
+    color(.03*m_sq,.05*m_sq,0);
+    box(size_sq);
+
+    //pink lumpy spread
+    reset();
+    displace(0,0,1)
+    displace(s_size,s_size*2,0);
+    color(25*y_sq,3*n_sq*y_sq,1.5*n_sq);
+    box(size_sq);
+
+    //row2
+
+    //tomato cherry
+    reset();
+    displace(0,0,1)
+    displace(-s_size,s_size,0);
+    color(.4*p_sq,.28*p_sq,.04*p_sq);
+    color(3*y_sq,0.04*y_sq,0.03);
+    //color(1.9*p_sq,0.16*y_sq,0.03*p_sq);
+    box(size_sq);
+
+    //pink shrimp
+    reset();
+    displace(0,0,1)
+    displace(0,s_size,0);
+    color(vec3(abs(n2_sq)*2)+normal*.3+vec3(25,1,0));
+    box(size_sq);
+
+    //yellow corn
+    reset();
+    displace(0,0,1)
+    displace(s_size,s_size,0);
+    color(9*y_sq+m_sq,1*y_sq+m_sq,0);
+    box(size_sq);
+
+    //row3
+
+    //olive skin
+    reset();
+    displace(0,0,1)
+    displace(-s_size,0,0);
+    color(.4*p_sq,.28*p_sq,.04*p_sq);
+    box(size_sq);
+
+    //yellow yolk twirl
+    reset();
+    displace(0,0,1)
+    function twirl(pn, tm) {
+        let r = length(vec2(pn.x, pn.y));
+        let th = atan(pn.x, pn.y);
+        let r2 = 1;
+        let f = 3; // # petals
+        let amp = .06;
+        let r3 = r2 + amp * sin(f * th + tm);
+        let v = pn.z;
+        let v2 = v + amp*cos(f * th - tm);
+        let d = sqrt(v2 * v2 + r3 * r3) - 0.4;
+    	return [d * 0.28, v2, r3];
+    }
+
+    let rad_sq = length(s_sq);
+    let ds_sq = twirl(s_sq, time);
+    color(3,nsin(33*ds_sq[2]),0);
+    box(size_sq);
+
+    //salmon spread
+    reset();
+    displace(0,0,1)
+    displace(s_size,0,0);
+    color(1.9*p_sq,0.09*y_sq,0.03*p_sq);
+    box(size_sq);
+
+     
+    //row4
+
+    //green garnish
+    reset();
+    displace(0,0,1)
+    displace(-s_size,-s_size,0);
+    color(0,0.05*n_sq,0)
+    box(size_sq);
+
+    //merita enrich bread
+    reset();
+    displace(0,0,1)
+    displace(0,-s_size,0);
+    color(16*m_sq,15*m_sq,8*m_sq);
+    box(size_sq);
+
+    //anchovie
+    reset();
+    displace(0,0,1)
+    displace(s_size,-s_size,0);
+    color(.28*m_sq*wave,.06*m_sq*wave,.002);
+    box(size_sq);
+
+
       
         // color behaviors
         let w_sugar = noise (s*80); 
