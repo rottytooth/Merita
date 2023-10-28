@@ -8,19 +8,13 @@
 
     <link rel="stylesheet" href="./style.css">
 
-    <!-- <script src="./lib/peg-0.10.0.js"></script>
+    <script src="./lib/peg-0.10.0.js"></script>
     <script src="./recipe_parser.js"></script>
-    <script src="./main.js" type="module"></script> -->
-
-    <script src="index.67c236a5.js"></script>
-    <script src="index.760f6671.js"></script>
-    <script src="index.63aff760.js" defer=""></script>
-    
+    <script src="./main.js" type="module"></script>  
     
   </head>  
   <body>
     <div style="visibility: collapse;display:none"><!-- HACK ALERT: preloading recipes so yarn knows they exist. -->
-      <iframe src="recipes/CHEESE-OLIVE CANAPES.txt"></iframe>
       <iframe src="recipes/CORNED BEEF HASH.txt"></iframe>
       <iframe src="recipes/CRAB CANAPES.txt"></iframe>
       <iframe src="recipes/CREAMED SHRIMP ON TOAST.txt"></iframe>
@@ -29,13 +23,13 @@
       <iframe src="recipes/MINCED CHICKEN.txt"></iframe>
       <iframe src="recipes/ORANGE ANGEL FOOD TORTE.txt"></iframe>
       <iframe src="recipes/PINWHEELS.txt"></iframe>
-      <!-- <iframe src="recipes/ROLLED.txt"></iframe> -->
       <iframe src="img/boy_and_girl.png"></iframe>
       <iframe src="img/merita_bread.png"></iframe>
       <iframe src="img/devil_egg.png"></iframe>
       <iframe src="img/porcellain_dog.png"></iframe>
       <iframe src="img/merita_family.png"></iframe>
     </div>
+    <div id="bigger_container">
     <div class="container" style="border: 1px solid black;">    
     <div id="code">
       <img src="img/merita_brand.png" height="60" width="221" style="margin-left: -20px;margin-bottom:20px;"><br>
@@ -43,15 +37,16 @@
       <textarea id="source"></textarea>
       <!-- <input type="button" value="update" id="updateBtn" /> -->
       <div id="error"></div>
+      Select or alter a recipe to generate a new animation
     </div>
     <div id="right">
-      <div id="draw">
-        <!-- <canvas id="output_canvas" powerpreference="high-performance" width="865" height="745"></canvas> -->
-      </div>
+      <div id="draw"></div>
       <div id="overlapper">
         <canvas id="2d_canvas"></canvas>
       </div>
       </div>
     </div>
   </div>
+</div>
+</body>
 </html> 

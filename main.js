@@ -1,14 +1,12 @@
 import {sculptToMinimalRenderer} from 'shader-park-core';
 
 const recipes = [
-  "CHEESE-OLIVE CANAPES",
   "DEVILED TONGUE",
   "PINWHEELS",
   "CORNED BEEF HASH",
   "HOT CHEESE-TOMATO",
   "CRAB CANAPES",
   "MINCED CHICKEN",
-  "ROLLED",
   "CREAMED SHRIMP ON TOAST",
   "ORANGE ANGEL FOOD TORTE"
 ];
@@ -17,7 +15,6 @@ const default_recipe = "HOT CHEESE-TOMATO";
 
 const load_recipe = () => {
   let draw = document.getElementById("draw");
-  draw.innerHTML = null;
   let errorOutput = document.getElementById("error");
   errorOutput.innerHTML = "";
 
@@ -28,39 +25,37 @@ const load_recipe = () => {
   let newCanv = document.createElement("canvas");
   newCanv.id = "output_canvas";
   let pegcodeblock = document.getElementById("source");
-
-  let program = recipeParser.parse(pegcodeblock.value);
-
-//  alert(program);
   
   // load new program
   try {
+    let program = recipeParser.parse(pegcodeblock.value);
     sculptToMinimalRenderer(newCanv, program);
   }
   catch(e) {
-    errorOutput.innerText = e;
+    errorOutput.innerText = e;  
   }
 
-  // newCanv.width = 2482;
-  // newCanv.height = 2498;
-  // newCanv.style.width = '941px';
-  // newCanv.style.height = '949px';
-  newCanv.width = 2082; //1982;
-  newCanv.height = 2098; //1924;
-  newCanv.style.width = '841px';
+  draw.innerHTML = null;
+
+  newCanv.width = 2082;
+  newCanv.height = 2098;
+  newCanv.style.width = '861px';
   newCanv.style.height = '849px';
   newCanv.setAttribute('powerpreference','high-performance');
-  // newCanv.setAttribute('data-engine','three.js r155');
   draw.appendChild(newCanv);
 
   // set overlap div
-  document.getElementById('overlapper').style.height = newCanv.clientHeight + "px";
+  let canvas2d = document.getElementById('2d_canvas');
+  canvas2d.height = newCanv.height;
+  canvas2d.width = newCanv.width;
+  canvas2d.style.height = (newCanv.clientHeight) + "px";
+  canvas2d.style.width = (newCanv.clientWidth) + "px";
 
-  let overlap = document.getElementById('2d_canvas');
-  overlap.height = newCanv.height;
-  overlap.width = newCanv.width;
-  overlap.style.height = (newCanv.clientHeight + 100) + "px";
-  overlap.style.width = (newCanv.clientWidth + 100) + "px";
+  let overlapper = document.getElementById('overlapper');
+  overlapper.height = newCanv.height;
+  overlapper.width = newCanv.width;
+  overlapper.style.height = (newCanv.clientHeight) + "px";
+  overlapper.style.width = (newCanv.clientWidth) + "px";
 };
 
 const update_dropdown = () => {
@@ -87,8 +82,6 @@ window.addEventListener('load', function() {
 
   recipe_list.addEventListener("change", update_dropdown);
   update_dropdown();
-
-  // document.getElementById("updateBtn").addEventListener("click", load_recipe);
 
   document.getElementById('source').addEventListener("input", load_recipe);
 
